@@ -2,16 +2,12 @@
 
 #include "TheThingsUno.h"
 
-const byte devAddr[4] = { 0x02, 0xDE, 0xAE, 0x00 };
-const byte appSKey[16] = { 0x0D, 0x0E, 0x0A, 0x0D, 0x0B, 0x0E, 0x0E, 0x0F, 0x0C, 0x0A, 0x0F, 0x0E, 0x0B, 0x0A, 0x0B, 0x0E };
-const byte nwkSKey[16] = { 0x0D, 0x0E, 0x0A, 0x0D, 0x0B, 0x0E, 0x0E, 0x0F, 0x0C, 0x0A, 0x0F, 0x0E, 0x0B, 0x0A, 0x0B, 0x0E };
+const byte devAddr[4] = {0x02, 0xDE, 0xAE, 0x00};
+const byte appSKey[16] = {0x2B, 0x7E, 0x15, 0x16, 0x28, 0xAE, 0xD2, 0xA6, 0xAB, 0xF7, 0x15, 0x88, 0x09, 0xCF, 0x4F, 0x3C};
+const byte nwkSKey[16] = {0x2B, 0x7E, 0x15, 0x16, 0x28, 0xAE, 0xD2, 0xA6, 0xAB, 0xF7, 0x15, 0x88, 0x09, 0xCF, 0x4F, 0x3C};
 
 #define debugSerial Serial
 #define loraSerial Serial1
-
-// These are the input pins of your sensors
-#define TEMPSENSOR 0
-#define SOILSENSOR 1
 
 TheThingsUno ttu;
 
@@ -20,23 +16,21 @@ void setup()
   debugSerial.begin(115200);
   loraSerial.begin(57600);
 
+  delay(3000);
+  debugSerial.println("Initializing...");
+  
   ttu.init(loraSerial, debugSerial);
   ttu.reset();
   ttu.personalize(devAddr, nwkSKey, appSKey);
-
-#ifdef DEBUG
-  ttu.debugStatus();
-#endif
+  ttu.showStatus();
   
-  Serial.println("Setup for The Things Network.");
+  debugSerial.println("Setup for The Things Network.");
+
+  delay(1000);
 }
 
 void loop() {
-  while (debugSerial.available())
-    loraSerial.write((char)debugSerial.read());
+  ttu.sendString("Hello world!");
 
-  while (loraSerial.available())
-    debugSerial.write((char)loraSerial.read());
-
-  delay(1);
+  delay(5000);
 }

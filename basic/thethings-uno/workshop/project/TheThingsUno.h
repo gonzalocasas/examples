@@ -36,11 +36,11 @@ class TheThingsUno
     String model;
 
     String readLine(int waitTime = DEFAULT_WAIT_TIME);
-    bool waitForOK(int waitTime = DEFAULT_WAIT_TIME);
+    bool waitForOK(int waitTime = DEFAULT_WAIT_TIME, String okMessage = "ok");
     String readValue(String key);
     bool sendCommand(String cmd, int waitTime = DEFAULT_WAIT_TIME);
     bool sendCommand(String cmd, String value, int waitTime = DEFAULT_WAIT_TIME);
-    bool sendCommand(String cmd, const byte* buffer, int length, int waitTime = DEFAULT_WAIT_TIME);
+    bool sendCommand(String cmd, const byte* buf, int length, int waitTime = DEFAULT_WAIT_TIME);
     bool enableFsbChannels(int fsb);
 
   public:
@@ -50,10 +50,7 @@ class TheThingsUno
     bool join(const byte appEui[8], const byte appKey[16]);
     void sendBytes(const byte* buffer, int length, int port = 1, bool confirm = false);
     void sendString(String message, int port = 1, bool confirm = false);
-
-#ifdef DEBUG
-    void debugStatus();
-#endif
+    void showStatus();
 };
 
 #endif
