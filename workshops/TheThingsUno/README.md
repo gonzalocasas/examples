@@ -38,7 +38,7 @@ an account here][accounts].
 After registering and validating your account, you will be able to
 log in to [The Things Network dashboard][dashboard].
 
-#### Create An Application
+#### Create an Application
 
 Users can create applications. Applications have an unique identifier, the EUI,
 which is issued by The Things Network and is guaranteed to be unique.
