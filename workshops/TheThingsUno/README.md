@@ -45,7 +45,7 @@ which is issued by The Things Network and is guaranteed to be unique.
 
 Create your first The Things Network application by clicking
 [create application](https://staging.thethingsnetwork.org/applications/create).
-Fill in the desired application name (something like `Julia's temperature sensornet` if your name is Julia) and click **Create application**.
+Fill in the desired application name and click **Create application**.
 
 ![create application](./media/create-application.png)
 
