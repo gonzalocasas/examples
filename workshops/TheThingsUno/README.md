@@ -189,9 +189,9 @@ the precision we need we could encode the integer and fractal parts as bytes in
 a two-byte payload. Like so:
 
 ```
-float temperature = 21.5; // This is a analog reading
+float luminance = 50.2; // This is a analog reading
 
-int data = (int)(temperature * 100); // Get rid of fraction (data == 2150)
+int data = (int)(luminance * 100); // Get rid of fraction (data == 5020)
 byte buf[2];
 buf[0] = highByte(data);
 buf[1] = lowByte(data);
@@ -201,10 +201,10 @@ ttu.sendBytes(buf, 2);
 
 Set up the above loop in your Arduino and click **Sketch** > **Verify/Compile**
 and **Sketch** > **Upload** again.  This will make the device send bytes
-representing our temperature value `21.5`.
+representing our luminance value `50.2`.
 
 If you now have a look at the device page on the Dashboard you'll see your data
-coming in. The payload should read `08 66` (the byte representation of `2150`).
+coming in. The payload should read `19 3C` (the byte representation of `5020`).
 
 *Note: how you encode your payload depends on the sensor values and the use case
 of your application.
@@ -244,18 +244,18 @@ In the *decoder* section, enter the following to decode the payload:
 function (bytes) {
   var data = (bytes[0] << 8) | bytes[1];
   return {
-    temperature: data / 100.0,
+    luminance: data / 100.0,
   };
 }
 ```
 
 Before saving our payload function we can test it first by entering a test
-payload in the box below. Enter `0866` and click **Test**. The test output
+payload in the box below. Enter `139C` and click **Test**. The test output
 should correspond to the temperature value we sen earlier:
 
 ```
 {
-  "temperature": 21.5
+  "luminance": 50.2
 }
 ```
 
@@ -268,72 +268,29 @@ payload will now be logged in its decoded form.
 
 ![Decoded payloads](./media/decoded-payloads.png)
 
-### Getting Your Data
+### Working with MQTT
 
-In this tutorial, we are using Node RED to get the data from The Things Network
-routing services and push it to an application back-end.
+In this tutorial, we are using Paho MQTT clients to get data from The Things
+Network and do something meaningful with it. See the [Eclipse Paho project
+page][paho].
 
-1. Follow the instructions from your workshop facilitator to get to your Node
-   RED environment;
-2. From the **input** category in the toolbox on the left, drop a new **MQTT**
-   node on your workflow
-3. Double-click the node named `mqtt`
-4. Click on the pencil icon next to **Add new mqtt-broker...**
-5. Enter for **Server**: `staging.thethingsnetwork.org`
-6. Go to **Security**
-7. Enter in **Username** your AppEUI (check the Application page)
-8. Enter in **Password** your Access Key (check the Application page)
-9. Click **Add**
-10. Enter in **Topic**: `+/devices/+/up`. This subscribes you to all devices in
-    your application
-11. From the **function** category, drop a new **JSON** node on the flow and
-    connect the output of the `+/devices/+/up` node to the input of the `json`
-    node
-12. From the **output** category, drop a new **debug** node on the flow and
-    connect the output of the **json** node to the input of the **debug** node.
-13. Double click the debug node and select **message property** from the Ouput
-    dropdown. Enter `msg.payload.fields` in the box below. And click **Ok**.
+Use the following settings when configuring the MQTT client. Get the AppEUI and
+App Access Key from the dashboard, you need them to login to the MQTT broker.
 
-Your flow should look like this:
+- Host: `staging.thethingsnetwork.org`
+- Username: your AppEUI
+- Password: your App Access Key
+- Optional: disable clean session, and set client ID to a unique value
+- Subscribe to the following topics:
+  - **+/devices/+/activations** for device activations
+  - **+/devices/+/up** for uplink packets
+- Publish to the following topics:
+  - **`<AppEUI>`/devices/`<DevEUI>`/down** with the JSON format: `{"payload": "<base64>", "port": 1, "ttl": "1h"}`
 
-![nodered-debug-flow](./media/nodered-debug.png)
+[See more about connecting applications][connectapp]
 
-Click **Deploy** and monitor the debug tab for incoming messages. You will start
-seeing messages like:
-```
-{ temperature: 21.5 }
-```
 
-## Push to IFTTT
-
-1. Go to [IFTTT Maker Channel](https://ifttt.com/maker)
-2. Click **Connect**
-3. Go to **Receive a web request**
-4. Click **Create a new Recipe**
-5. Type `Maker` in the search box to choose Maker as the trigger channel
-6. Click **Receive a web request** as the trigger
-7. Enter an **Event Name**, for example `temperature`
-8. Pick an **Action Channel** and configure it
-9. Use the fields `value1`, `value2` and/or `value3`
-10. Click **Create Action**
-11. Click **Create Recipe**
-12. Go back to Node RED
-13. Drop a new **Function** on the flow
-14. Return `value1`, `value2` and/or `value3` as JSON object. For the previous
-    example:
-```
-return {
-    payload: {
-        value1: msg.payload.fields.temperature
-    }
-}
-```
-15. Drop a new **HTTP request** on the flow;
-16. Select the **POST** method and enter the URL as seen on **How to Trigger
-    Events** in IFTTT, for example:
-
-![nodered-request](./media/nodered-request.png)
-![nodered-flow](./media/nodered-flow.png)
-
-[accounts]:  https://account.thethingsnetwork.org
-[dashboard]: https://staging.thethingsnetwork.org
+[accounts]:   https://account.thethingsnetwork.org
+[dashboard]:  https://staging.thethingsnetwork.org
+[paho]:       http://www.eclipse.org/paho/
+[connectapp]: http://staging.thethingsnetwork.org/wiki/Backend/Connect/Application
