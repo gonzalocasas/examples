@@ -1,6 +1,6 @@
 # The Things Uno MQTT Workshop
 
-EclipseCon Europe, Toulouse, June 7, 2016
+EclipseCon France, Toulouse, June 7, 2016
 
 ## Pre-requisites
 
