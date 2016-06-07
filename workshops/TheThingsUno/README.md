@@ -289,6 +289,14 @@ App Access Key from the dashboard, you need them to login to the MQTT broker.
 
 [See more about connecting applications][connectapp]
 
+#### SDKs and Integrations
+
+You can use any MQTT client, but to make life even easier for you, there is also
+a SDK for Node.js: `npm install ttn`
+
+Also, there are integrations for AWS IoT and Azure IoT Hub available. Please ask
+the facilitator for more information.
+
 
 [accounts]:   https://account.thethingsnetwork.org
 [dashboard]:  https://staging.thethingsnetwork.org
