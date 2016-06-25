@@ -1,5 +1,7 @@
 # The Things Uno MQTT Workshop
 
+McKinsey Retreat, Montenegro 2016
+
 ## Pre-requisites
 
 1. The Things Uno (featuring Microchip RN2483 or RN2903)
@@ -65,59 +67,14 @@ activation by personalization (ABP) and over the air activation (OTAA). In this
 workshop, we use OTAA. This requires you to register your device with its unique
 DevEUI in The Things Network Dashboard.
 
-##### Get Your Device EUI
-
-To activate your device, we need to know its unique identifier, called the
-Device EUI or DevEUI. The DevEUI is hard coded by the manufacturer, in this case
-Microchip, into the LoRa module. This DevEUI is used to register the node in The
-Things Network for identification. The DevEUI can be retrieved from the node with
-the **device-info** sketch.
-
-1. In the Arduino IDE, open: **File > Examples > TheThingsUno > DeviceInfo**
-2. Upload sketch without modification.
-3. Click **Sketch > Verify/Compile** (Arduino says *Done compiling*)
-4. Click **Sketch > Upload** (Arduino says *Done uploading*)
-5. The Arduino IDE will give feedback when you verify or upload the code to a
-board. It should look similar to this:
-
-```
-Sketch uses 9,656 bytes (33%) of program storage space. Maximum is 28,672 bytes.
-Global variables use 1,253 bytes (48%) of dynamic memory, leaving 1,307 bytes for local variables. Maximum is 2,560 bytes.
-```
-
-The Things Uno talks to the computer over a serial port. The data that is send
-is displayed with the **Serial Monitor** of the Arduino IDE. Using the serial
-monitor makes it possible to monitor the status of The Things Uno.
-
-Open the serial monitor in the Arduino IDE: go to **Tools** >
-**Serial Monitor**.
-
-You should now be receiving data on the serial monitor, which prints something
-like this:
-
-```
-Device Information
-
-EUI: 0004A30B001B672E
-Battery: 3304
-AppEUI: 0000000000000000
-DevEUI: 0004A30B001B672E
-DevAddr: 00000000
-Data Rate: 5
-RX Delay 1: 1000
-RX Delay 2: 2000
-
-use the device `EUI` to register the device for OTAA
-```
-
-Save the `EUI: 0004A30B001B672E` (`DevEUI`) for later.  
-
 ##### Register the device
 
 To register the device, go back to The Things Network dashboard and click
 **Register Device** on the application page. This will take you to the device
 registration page. Here, select **OTAA** and enter your DevEUI as obtained from
-The Things Uno. We will let the App Key to be randomly generated. To continue,
+The Things Uno. This is the value written on your The Things Uno.
+
+We will let the App Key to be randomly generated. To continue,
 click **Register**.
 
 ![register-device](./media/register-device-otaa.png)
